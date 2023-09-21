@@ -3,6 +3,7 @@ import joblib
 import pandas as pd
 from flask import Flask, request, jsonify
 from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.exceptions import NotFittedError
 
 app = Flask(__name__)
 
@@ -13,6 +14,19 @@ model = joblib.load('multinomial_nb_model.joblib')
 # Note: You need to have access to the vectorizer used during training
 # to transform new email data in the same way.
 vectorizer = joblib.load('count_vectorizer.joblib')
+
+# Check if the vectorizer is fitted
+try:
+    # Test if the vectorizer is fitted
+    vectorizer.transform(['test'])
+except NotFittedError:
+    # If not fitted, fit the vectorizer
+    # You should replace 'training_data' with the data the vectorizer was originally trained on
+    vectorizer.fit_transform(['training_data'])
+
+@app.route('/', methods=['GET'])
+def default_route():
+    return "This is the API endpoint for email classification. Use /classify_email to classify an email."
 
 @app.route('/classify_email', methods=['POST'])
 def classify_email():
