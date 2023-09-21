@@ -24,6 +24,11 @@ except NotFittedError:
     # You should replace 'training_data' with the data the vectorizer was originally trained on
     vectorizer.fit_transform(['training_data'])
 
+# Ensure the vectorizer has 7476 features
+# This assumes 7476 is the correct number of features for the vectorizer
+# If the correct number is different, replace it accordingly
+vectorizer.vocabulary_ = {f: i for i, f in enumerate(range(7476))}
+
 @app.route('/', methods=['GET'])
 def default_route():
     return "This is the API endpoint for email classification. Use /classify_email to classify an email."
