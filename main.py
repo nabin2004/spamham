@@ -1,3 +1,4 @@
+import os
 import joblib
 import pandas as pd
 from flask import Flask, request, jsonify
@@ -30,4 +31,7 @@ def classify_email():
     return jsonify({'prediction': result})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    # Heroku dynamically sets the port
+    port = int(os.environ.get('PORT', 5000))
+    # Start the server
+    app.run(host='0.0.0.0', port=port)
